@@ -4,6 +4,7 @@
     <id>DevTeam.GenericService</id>
     <version>1.0.3</version>
     <title>DevTeam.GenericService</title>
+    <iconUrl>http://dev-team.com/img/devteam.png</iconUrl>
     <authors>Dev Team Inc.</authors>
     <owners>Dev Team Inc.</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
