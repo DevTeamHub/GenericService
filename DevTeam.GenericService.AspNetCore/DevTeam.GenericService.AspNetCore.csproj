@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+    <Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<PackageId>DevTeam.GenericService.AspNetCore</PackageId>
+	<Version>3.3.0</Version>
+	<Authors>dimabezzubenkov, dev-team</Authors>
+	<Company>Dev Team, Inc</Company>
+	<Copyright>Copyright (c) Dev Team, Inc 2021.</Copyright>
+	<Description>Integration between GenericService and AspNetCore.</Description>
+	<PackageIcon>icon.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/DevTeamHub/GenericService</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>Repository;EntityFramework;IQueryable;AspNet</PackageTags>
+	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevTeam.GenericRepository.AspNetCore" Version="3.3.0" />
+    <PackageReference Include="DevTeam.GenericService" Version="3.3.0" />
+    <PackageReference Include="DevTeam.QueryMappings.AspNetCore" Version="3.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<None Include="icon.png" Pack="true" PackagePath="\" />
+	<None Include="LICENSE.md" Pack="true" PackagePath="\" />
+	<None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+    <Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<PackageId>DevTeam.GenericService</PackageId>
+	<Version>3.3.0</Version>
+	<Authors>dimabezzubenkov, dev-team</Authors>
+	<Company>Dev Team, Inc</Company>
+	<Copyright>Copyright (c) Dev Team, Inc 2021.</Copyright>
+    <Description>Package provides integration between Generic Repository and Query Mappings for Entity Framework</Description>
+    <PackageIcon>icon.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/DevTeamHub/GenericService</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>Repository;EntityFramework;IQueryable;</PackageTags>
+	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<None Include="icon.png" Pack="true" PackagePath="\" />
+	<None Include="LICENSE.md" Pack="true" PackagePath="\" />
+	<None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevTeam.GenericRepository" Version="3.3.0" />
+    <PackageReference Include="DevTeam.QueryMappings" Version="3.3.0" />
+  </ItemGroup>
+
+</Project>
