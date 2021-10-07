@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace DevTeam.GenericService
 {
-    public interface IGenericService
+    public interface IGenericService: IGenericService<IDbContext>
+    { }
+
+    public interface IGenericService<TContext>
+        where TContext: IDbContext
     {
         IQueryable<TModel> QueryList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null)
             where TEntity : class;
