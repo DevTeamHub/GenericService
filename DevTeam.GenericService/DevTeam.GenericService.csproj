@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>DevTeam.GenericService</PackageId>
-	<Version>3.4.1</Version>
+	<Version>3.4.2</Version>
 	<Authors>dimabezzubenkov, dev-team</Authors>
 	<Company>Dev Team, Inc</Company>
 	<Copyright>Copyright (c) Dev Team, Inc 2021.</Copyright>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevTeam.GenericRepository" Version="3.4.1" />
+    <PackageReference Include="DevTeam.GenericRepository" Version="3.4.2" />
     <PackageReference Include="DevTeam.QueryMappings" Version="3.3.0" />
   </ItemGroup>
 

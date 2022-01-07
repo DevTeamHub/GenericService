@@ -13,7 +13,7 @@ namespace DevTeam.GenericService
     public class GenericService: GenericService<IDbContext>, IGenericService 
     {
         public GenericService(
-            IMappingService mappings,
+            IMappingService<IDbContext> mappings,
             IRepository repository,
             IReadOnlyRepository readRepository)
             :base(mappings, repository, readRepository)
@@ -28,7 +28,7 @@ namespace DevTeam.GenericService
         private readonly IRepository<TContext> _writeRepository; 
 
         public GenericService(
-            IMappingService mappings,
+            IMappingService<TContext> mappings,
             IRepository<TContext> repository,
             IReadOnlyRepository<TContext> readRepository)
         {
@@ -39,79 +39,161 @@ namespace DevTeam.GenericService
 
         #region Get List
 
-        public IQueryable<TModel> QueryList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null)
+        public IQueryable<TModel> QueryList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
             where TEntity : class
         {
             var query = _readRepository.GetList(filter);
-            return _mappings.Map<TEntity, TModel>(query);
+            return _mappings.Map<TEntity, TModel>(query, mappingName);
         }
 
-        public List<TModel> GetList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null)
+        public IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
             where TEntity : class
+            where TArgs: class
         {
-            return QueryList<TEntity, TModel>(filter).ToList();
+            var query = _readRepository.GetList(filter);
+            return _mappings.Map<TEntity, TModel, TArgs>(query, args, mappingName);
         }
 
-        public Task<List<TModel>> GetListAsync<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null)
+        public List<TModel> GetList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
             where TEntity : class
         {
-            return QueryList<TEntity, TModel>(filter).ToListAsync();
+            return QueryList<TEntity, TModel>(filter, mappingName).ToList();
+        }
+
+        public List<TModel> GetList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
+            where TEntity : class
+            where TArgs: class
+        {
+            return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).ToList();
+        }
+
+        public Task<List<TModel>> GetListAsync<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
+            where TEntity : class
+        {
+            return QueryList<TEntity, TModel>(filter, mappingName).ToListAsync();
+        }
+
+        public Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
+            where TEntity : class
+            where TArgs : class
+        {
+            return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).ToListAsync();
         }
 
         #endregion
 
         #region Get One
 
-        public IQueryable<TModel> QueryOne<TEntity, TModel, TKey>(TKey id)
+        public IQueryable<TModel> QueryOne<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey> 
         {
             var query = _readRepository.QueryOne<TEntity, TKey>(id);
-            return _mappings.Map<TEntity, TModel>(query);
+            return _mappings.Map<TEntity, TModel>(query, mappingName);
         }
 
-        public IQueryable<TModel> QueryOne<TEntity, TModel>(int id)
+        public IQueryable<TModel> QueryOne<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
+            where TEntity : class, IEntity<TKey>
+            where TArgs: class
+            where TKey : IEquatable<TKey>
+        {
+            var query = _readRepository.QueryOne<TEntity, TKey>(id);
+            return _mappings.Map<TEntity, TModel, TArgs>(query, args, mappingName);
+        }
+
+        public IQueryable<TModel> QueryOne<TEntity, TModel>(int id, string? mappingName = null)
             where TEntity : class, IEntity
         {
-            return QueryOne<TEntity, TModel, int>(id);
+            return QueryOne<TEntity, TModel, int>(id, mappingName);
         }
 
-        public TModel Get<TEntity, TModel>(Expression<Func<TEntity, bool>> filter)
+        public IQueryable<TModel> QueryOne<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
+            where TEntity : class, IEntity
+            where TArgs: class
+        {
+            return QueryOne<TEntity, TModel, TArgs, int>(id, args, mappingName);
+        }
+
+        public TModel Get<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
             where TEntity : class
         {
-            return QueryList<TEntity, TModel>(filter).FirstOrDefault();
+            return QueryList<TEntity, TModel>(filter, mappingName).FirstOrDefault();
         }
 
-        public Task<TModel> GetAsync<TEntity, TModel>(Expression<Func<TEntity, bool>> filter)
+        public TModel Get<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+            where TEntity : class
+            where TArgs : class
+        {
+            return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).FirstOrDefault();
+        }
+
+        public Task<TModel> GetAsync<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
             where TEntity : class
         {
-            return QueryList<TEntity, TModel>(filter).FirstOrDefaultAsync();
+            return QueryList<TEntity, TModel>(filter, mappingName).FirstOrDefaultAsync();
         }
 
-        public TModel Get<TEntity, TModel, TKey>(TKey id)
+        public Task<TModel> GetAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+            where TEntity : class
+            where TArgs : class
+        {
+            return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).FirstOrDefaultAsync();
+        }
+
+        public TModel Get<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
-            return QueryOne<TEntity, TModel, TKey>(id).FirstOrDefault();
+            return QueryOne<TEntity, TModel, TKey>(id, mappingName).FirstOrDefault();
         }
 
-        public Task<TModel> GetAsync<TEntity, TModel, TKey>(TKey id)
+        public TModel Get<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
+            where TEntity : class, IEntity<TKey>
+            where TArgs: class
+            where TKey : IEquatable<TKey>
+        {
+            return QueryOne<TEntity, TModel, TArgs, TKey>(id, args, mappingName).FirstOrDefault();
+        }
+
+        public Task<TModel> GetAsync<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
-            return QueryOne<TEntity, TModel, TKey>(id).FirstOrDefaultAsync();
+            return QueryOne<TEntity, TModel, TKey>(id, mappingName).FirstOrDefaultAsync();
         }
 
-        public TModel Get<TEntity, TModel>(int id)
-            where TEntity : class, IEntity
+        public Task<TModel> GetAsync<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
+            where TEntity : class, IEntity<TKey>
+            where TArgs: class
+            where TKey : IEquatable<TKey>
         {
-            return QueryOne<TEntity, TModel>(id).FirstOrDefault();
+            return QueryOne<TEntity, TModel, TArgs, TKey>(id, args, mappingName).FirstOrDefaultAsync();
         }
 
-        public Task<TModel> GetAsync<TEntity, TModel>(int id)
+        public TModel Get<TEntity, TModel>(int id, string? mappingName = null)
             where TEntity : class, IEntity
         {
-            return QueryOne<TEntity, TModel>(id).FirstOrDefaultAsync();
+            return QueryOne<TEntity, TModel>(id, mappingName).FirstOrDefault();
+        }
+
+        public TModel Get<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
+            where TEntity : class, IEntity
+            where TArgs: class
+        {
+            return QueryOne<TEntity, TModel, TArgs>(id, args, mappingName).FirstOrDefault();
+        }
+
+        public Task<TModel> GetAsync<TEntity, TModel>(int id, string? mappingName = null)
+            where TEntity : class, IEntity
+        {
+            return QueryOne<TEntity, TModel>(id, mappingName).FirstOrDefaultAsync();
+        }
+
+        public Task<TModel> GetAsync<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
+            where TEntity : class, IEntity
+            where TArgs: class
+        {
+            return QueryOne<TEntity, TModel, TArgs>(id, args, mappingName).FirstOrDefaultAsync();
         }
 
         #endregion
@@ -178,10 +260,10 @@ namespace DevTeam.GenericService
 
         #region Add
 
-        public TEntity Add<TModel, TEntity>(TModel model)
+        public TEntity Add<TModel, TEntity>(TModel model, string? addMappingName = null)
             where TEntity : class
         {
-            var entity = _mappings.Map<TModel, TEntity>(model);
+            var entity = _mappings.Map<TModel, TEntity>(model, addMappingName);
 
             _writeRepository.Add(entity);
             _writeRepository.Save();
@@ -189,24 +271,36 @@ namespace DevTeam.GenericService
             return entity;
         }
 
-        public TResult Add<TModel, TEntity, TResult, TKey>(TModel model)
+        public TEntity Add<TModel, TEntity, TArgs>(TModel model, TArgs addMappingArgs, string? addMappingName = null)
+            where TEntity : class
+            where TArgs : class
+        {
+            var entity = _mappings.Map<TModel, TEntity, TArgs>(model, addMappingArgs, addMappingName);
+
+            _writeRepository.Add(entity);
+            _writeRepository.Save();
+
+            return entity;
+        }
+
+        public TResult Add<TModel, TEntity, TResult, TKey>(TModel model, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey: IEquatable<TKey>
         {
-            var entity = Add<TModel, TEntity>(model);
-            return Get<TEntity, TResult, TKey>(entity.Id);
+            var entity = Add<TModel, TEntity>(model, addMappingName);
+            return Get<TEntity, TResult, TKey>(entity.Id, getMappingName);
         }
 
-        public TResult Add<TModel, TEntity, TResult>(TModel model)
+        public TResult Add<TModel, TEntity, TResult>(TModel model, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity
         {
-            return Add<TModel, TEntity, TResult, int>(model);
+            return Add<TModel, TEntity, TResult, int>(model, addMappingName, getMappingName);
         }
 
-        public async Task<TEntity> AddAsync<TModel, TEntity>(TModel model)
+        public async Task<TEntity> AddAsync<TModel, TEntity>(TModel model, string? addMappingName = null)
             where TEntity : class
         {
-            var entity = _mappings.Map<TModel, TEntity>(model);
+            var entity = _mappings.Map<TModel, TEntity>(model, addMappingName);
 
             await _writeRepository.AddAsync(entity);
             await _writeRepository.SaveAsync();
@@ -214,28 +308,40 @@ namespace DevTeam.GenericService
             return entity;
         }
 
-        public async Task<TResult> AddAsync<TModel, TEntity, TResult, TKey>(TModel model)
+        public async Task<TEntity> AddAsync<TModel, TEntity, TArgs>(TModel model, TArgs args, string? addMappingName = null)
+            where TEntity : class
+            where TArgs : class
+        {
+            var entity = _mappings.Map<TModel, TEntity, TArgs>(model, args, addMappingName);
+
+            await _writeRepository.AddAsync(entity);
+            await _writeRepository.SaveAsync();
+
+            return entity;
+        }
+
+        public async Task<TResult> AddAsync<TModel, TEntity, TResult, TKey>(TModel model, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
-            var entity = await AddAsync<TModel, TEntity>(model);
-            return await GetAsync<TEntity, TResult, TKey>(entity.Id);
+            var entity = await AddAsync<TModel, TEntity>(model, addMappingName);
+            return await GetAsync<TEntity, TResult, TKey>(entity.Id, getMappingName);
         }
 
-        public Task<TResult> AddAsync<TModel, TEntity, TResult>(TModel model)
+        public Task<TResult> AddAsync<TModel, TEntity, TResult>(TModel model, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity
         {
-            return AddAsync<TModel, TEntity, TResult, int>(model);
+            return AddAsync<TModel, TEntity, TResult, int>(model, addMappingName, getMappingName);
         }
 
         #endregion
 
         #region AddRange
 
-        public List<TEntity> AddRange<TModel, TEntity>(List<TModel> models)
+        public List<TEntity> AddRange<TModel, TEntity>(List<TModel> models, string? addMappingName = null)
             where TEntity : class
         {
-            var entities = _mappings.Map<TModel, TEntity>(models);
+            var entities = _mappings.Map<TModel, TEntity>(models, addMappingName);
 
             _writeRepository.AddRange(entities);
             _writeRepository.Save();
@@ -243,28 +349,40 @@ namespace DevTeam.GenericService
             return entities;
         }
 
-        public List<TResult> AddRange<TModel, TEntity, TResult, TKey>(List<TModel> models)
+        public List<TEntity> AddRange<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
+            where TEntity : class
+            where TArgs : class
+        {
+            var entities = _mappings.Map<TModel, TEntity, TArgs>(models, args, addMappingName);
+
+            _writeRepository.AddRange(entities);
+            _writeRepository.Save();
+
+            return entities;
+        }
+
+        public List<TResult> AddRange<TModel, TEntity, TResult, TKey>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
-            var entities = AddRange<TModel, TEntity>(models);
+            var entities = AddRange<TModel, TEntity>(models, addMappingName);
 
             var ids = entities.Select(x => x.Id).ToList();
-            var results = GetList<TEntity, TResult>(x => ids.Contains(x.Id));
+            var results = GetList<TEntity, TResult>(x => ids.Contains(x.Id), getMappingName);
 
             return results;
         }
 
-        public List<TResult> AddRange<TModel, TEntity, TResult>(List<TModel> models)
+        public List<TResult> AddRange<TModel, TEntity, TResult>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity
         {
-            return AddRange<TModel, TEntity, TResult, int>(models);
+            return AddRange<TModel, TEntity, TResult, int>(models, addMappingName, getMappingName);
         }
 
-        public async Task<List<TEntity>> AddRangeAsync<TModel, TEntity>(List<TModel> models)
+        public async Task<List<TEntity>> AddRangeAsync<TModel, TEntity>(List<TModel> models, string? addMappingName = null)
             where TEntity : class
         {
-            var entities = _mappings.Map<TModel, TEntity>(models);
+            var entities = _mappings.Map<TModel, TEntity>(models, addMappingName);
 
             await _writeRepository.AddRangeAsync(entities);
             await _writeRepository.SaveAsync();
@@ -272,22 +390,34 @@ namespace DevTeam.GenericService
             return entities;
         }
 
-        public async Task<List<TResult>> AddRangeAsync<TModel, TEntity, TResult, TKey>(List<TModel> models)
+        public async Task<List<TEntity>> AddRangeAsync<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
+            where TEntity : class
+            where TArgs : class
+        {
+            var entities = _mappings.Map<TModel, TEntity, TArgs>(models, args, addMappingName);
+
+            await _writeRepository.AddRangeAsync(entities);
+            await _writeRepository.SaveAsync();
+
+            return entities;
+        }
+
+        public async Task<List<TResult>> AddRangeAsync<TModel, TEntity, TResult, TKey>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
-            var entities = await AddRangeAsync<TModel, TEntity>(models);
+            var entities = await AddRangeAsync<TModel, TEntity>(models, addMappingName);
 
             var ids = entities.Select(x => x.Id).ToList();
-            var results = await GetListAsync<TEntity, TResult>(x => ids.Contains(x.Id));
+            var results = await GetListAsync<TEntity, TResult>(x => ids.Contains(x.Id), getMappingName);
 
             return results;
         }
 
-        public Task<List<TResult>> AddRangeAsync<TModel, TEntity, TResult>(List<TModel> models)
+        public Task<List<TResult>> AddRangeAsync<TModel, TEntity, TResult>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity
         {
-            return AddRangeAsync<TModel, TEntity, TResult, int>(models);
+            return AddRangeAsync<TModel, TEntity, TResult, int>(models, addMappingName, getMappingName);
         }
 
         #endregion
@@ -350,28 +480,50 @@ namespace DevTeam.GenericService
 
         #region Delete
 
-        public void Delete<TEntity>(int id)
+        public int Delete<TEntity>(int id)
             where TEntity : class, IEntity
         {
             _writeRepository.Delete<TEntity>(id);
+            return _writeRepository.Save();
         } 
 
-        public void Delete<TEntity>(Expression<Func<TEntity, bool>> filter)
+        public int Delete<TEntity>(Expression<Func<TEntity, bool>> filter)
             where TEntity : class
         {
             _writeRepository.Delete(filter);
+            return _writeRepository.Save();
         }
         
-        public Task DeleteAsync<TEntity>(int id)
+        public async Task<int> DeleteAsync<TEntity>(int id)
             where TEntity : class, IEntity
         {
-            return _writeRepository.DeleteAsync<TEntity>(id);
+            await _writeRepository.DeleteAsync<TEntity>(id);
+            return await _writeRepository.SaveAsync();
         }
 
-        public Task DeleteAsync<TEntity>(Expression<Func<TEntity, bool>> filter)
+        public async Task<int> DeleteAsync<TEntity>(Expression<Func<TEntity, bool>> filter)
             where TEntity : class
         {
-            return _writeRepository.DeleteAsync(filter);
+            await _writeRepository.DeleteAsync(filter);
+            return await _writeRepository.SaveAsync();
+        }
+
+        #endregion
+
+        #region Delete Range
+
+        public int DeleteRange<TEntity>(Expression<Func<TEntity, bool>> filter)
+            where TEntity : class
+        {
+            _writeRepository.DeleteRange(filter);
+            return _writeRepository.Save();
+        }
+
+        public async Task<int> DeleteRangeAsync<TEntity>(Expression<Func<TEntity, bool>> filter)
+            where TEntity : class
+        {
+            await _writeRepository.DeleteRangeAsync(filter);
+            return await _writeRepository.SaveAsync();
         }
 
         #endregion
