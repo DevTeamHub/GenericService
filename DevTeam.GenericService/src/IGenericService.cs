@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace DevTeam.GenericService
 {
+    public interface ISoftDeleteGenericService : ISoftDeleteGenericService<IDbContext>
+    { }
+
+    public interface ISoftDeleteGenericService<TContext> : IGenericService<TContext>
+        where TContext : IDbContext
+    { }
+
     public interface IGenericService: IGenericService<IDbContext>
     { }
 

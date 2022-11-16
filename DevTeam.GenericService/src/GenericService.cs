@@ -10,13 +10,35 @@ using System.Threading.Tasks;
 
 namespace DevTeam.GenericService
 {
-    public class GenericService: GenericService<IDbContext>, IGenericService 
+    public class SoftDeleteGenericService : SoftDeleteGenericService<IDbContext>, ISoftDeleteGenericService
+    {
+        public SoftDeleteGenericService(
+            IMappingService<IDbContext> mappings,
+            ISoftDeleteRepository<IDbContext> repository, 
+            IReadOnlyDeleteRepository<IDbContext> readRepository) 
+            : base(mappings, repository, readRepository)
+        {
+        }
+    }
+
+    public class SoftDeleteGenericService<TContext> : GenericService<TContext>, ISoftDeleteGenericService<TContext>
+        where TContext : IDbContext
+    {
+        public SoftDeleteGenericService(
+            IMappingService<TContext> mappings, 
+            ISoftDeleteRepository<TContext> repository, 
+            IReadOnlyDeleteRepository<TContext> readRepository) 
+            : base(mappings, repository, readRepository)
+        { }
+    }
+
+    public class GenericService : GenericService<IDbContext>, IGenericService
     {
         public GenericService(
             IMappingService<IDbContext> mappings,
             IRepository repository,
             IReadOnlyRepository readRepository)
-            :base(mappings, repository, readRepository)
+            : base(mappings, repository, readRepository)
         { }
     }
 

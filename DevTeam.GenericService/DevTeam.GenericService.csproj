@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevTeam.GenericRepository" Version="3.4.2" />
+    <PackageReference Include="DevTeam.GenericRepository" Version="3.4.3" />
     <PackageReference Include="DevTeam.QueryMappings" Version="3.3.0" />
   </ItemGroup>
 
