@@ -20,8 +20,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevTeam.GenericRepository.AspNetCore" Version="3.4.2" />
-    <PackageReference Include="DevTeam.GenericService" Version="3.4.2" />
+    <PackageReference Include="DevTeam.GenericRepository.AspNetCore" Version="3.4.3" />
+    <PackageReference Include="DevTeam.GenericService" Version="3.4.3" />
     <PackageReference Include="DevTeam.QueryMappings.AspNetCore" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
