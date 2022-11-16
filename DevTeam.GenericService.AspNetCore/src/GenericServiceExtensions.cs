@@ -23,7 +23,9 @@ namespace DevTeam.GenericService.AspNetCore
                 .AddQueryMappings()
                 .AddGenericRepository()
                 .AddScoped(typeof(IGenericService<>), typeof(GenericService<>))
-                .AddScoped<IGenericService, GenericService>();
+                .AddScoped<IGenericService, GenericService>()
+                .AddScoped(typeof(ISoftDeleteGenericService<>), typeof(SoftDeleteGenericService<>))
+                .AddScoped<ISoftDeleteGenericService, SoftDeleteGenericService>();
 
             return services;
         }
