@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>DevTeam.GenericService.AspNetCore</PackageId>
-	<Version>3.4.4</Version>
+	<Version>3.4.5</Version>
 	<Authors>dimabezzubenkov, dev-team</Authors>
 	<Company>Dev Team, Inc</Company>
 	<Copyright>Copyright (c) Dev Team, Inc 2021.</Copyright>
@@ -21,10 +21,10 @@
 
   <ItemGroup>
     <PackageReference Include="DevTeam.GenericRepository.AspNetCore" Version="3.4.3" />
-    <PackageReference Include="DevTeam.GenericService" Version="3.4.3" />
+    <PackageReference Include="DevTeam.GenericService" Version="3.4.5" />
     <PackageReference Include="DevTeam.QueryMappings.AspNetCore" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
