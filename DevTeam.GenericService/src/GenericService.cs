@@ -61,14 +61,14 @@ namespace DevTeam.GenericService
 
         #region Get List
 
-        public IQueryable<TModel> QueryList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
+        public virtual IQueryable<TModel> QueryList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
             where TEntity : class
         {
             var query = _readRepository.GetList(filter);
             return _mappings.Map<TEntity, TModel>(query, mappingName);
         }
 
-        public IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
+        public virtual IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
             where TEntity : class
             where TArgs: class
         {
@@ -76,26 +76,26 @@ namespace DevTeam.GenericService
             return _mappings.Map<TEntity, TModel, TArgs>(query, args, mappingName);
         }
 
-        public List<TModel> GetList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
+        public virtual List<TModel> GetList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
             where TEntity : class
         {
             return QueryList<TEntity, TModel>(filter, mappingName).ToList();
         }
 
-        public List<TModel> GetList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
+        public virtual List<TModel> GetList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
             where TEntity : class
             where TArgs: class
         {
             return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).ToList();
         }
 
-        public Task<List<TModel>> GetListAsync<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
+        public virtual Task<List<TModel>> GetListAsync<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
             where TEntity : class
         {
             return QueryList<TEntity, TModel>(filter, mappingName).ToListAsync();
         }
 
-        public Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
+        public virtual Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
             where TEntity : class
             where TArgs : class
         {
@@ -106,7 +106,7 @@ namespace DevTeam.GenericService
 
         #region Get One
 
-        public IQueryable<TModel> QueryOne<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
+        public virtual IQueryable<TModel> QueryOne<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey> 
         {
@@ -114,7 +114,7 @@ namespace DevTeam.GenericService
             return _mappings.Map<TEntity, TModel>(query, mappingName);
         }
 
-        public IQueryable<TModel> QueryOne<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
+        public virtual IQueryable<TModel> QueryOne<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
             where TEntity : class, IEntity<TKey>
             where TArgs: class
             where TKey : IEquatable<TKey>
@@ -123,53 +123,53 @@ namespace DevTeam.GenericService
             return _mappings.Map<TEntity, TModel, TArgs>(query, args, mappingName);
         }
 
-        public IQueryable<TModel> QueryOne<TEntity, TModel>(int id, string? mappingName = null)
+        public virtual IQueryable<TModel> QueryOne<TEntity, TModel>(int id, string? mappingName = null)
             where TEntity : class, IEntity
         {
             return QueryOne<TEntity, TModel, int>(id, mappingName);
         }
 
-        public IQueryable<TModel> QueryOne<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
+        public virtual IQueryable<TModel> QueryOne<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
             where TEntity : class, IEntity
             where TArgs: class
         {
             return QueryOne<TEntity, TModel, TArgs, int>(id, args, mappingName);
         }
 
-        public TModel Get<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
+        public virtual TModel Get<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
             where TEntity : class
         {
             return QueryList<TEntity, TModel>(filter, mappingName).FirstOrDefault();
         }
 
-        public TModel Get<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+        public virtual TModel Get<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
             where TEntity : class
             where TArgs : class
         {
             return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).FirstOrDefault();
         }
 
-        public Task<TModel> GetAsync<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
+        public virtual Task<TModel> GetAsync<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
             where TEntity : class
         {
             return QueryList<TEntity, TModel>(filter, mappingName).FirstOrDefaultAsync();
         }
 
-        public Task<TModel> GetAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+        public virtual Task<TModel> GetAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
             where TEntity : class
             where TArgs : class
         {
             return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).FirstOrDefaultAsync();
         }
 
-        public TModel Get<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
+        public virtual TModel Get<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
             return QueryOne<TEntity, TModel, TKey>(id, mappingName).FirstOrDefault();
         }
 
-        public TModel Get<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
+        public virtual TModel Get<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
             where TEntity : class, IEntity<TKey>
             where TArgs: class
             where TKey : IEquatable<TKey>
@@ -177,14 +177,14 @@ namespace DevTeam.GenericService
             return QueryOne<TEntity, TModel, TArgs, TKey>(id, args, mappingName).FirstOrDefault();
         }
 
-        public Task<TModel> GetAsync<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
+        public virtual Task<TModel> GetAsync<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
             return QueryOne<TEntity, TModel, TKey>(id, mappingName).FirstOrDefaultAsync();
         }
 
-        public Task<TModel> GetAsync<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
+        public virtual Task<TModel> GetAsync<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
             where TEntity : class, IEntity<TKey>
             where TArgs: class
             where TKey : IEquatable<TKey>
@@ -192,26 +192,26 @@ namespace DevTeam.GenericService
             return QueryOne<TEntity, TModel, TArgs, TKey>(id, args, mappingName).FirstOrDefaultAsync();
         }
 
-        public TModel Get<TEntity, TModel>(int id, string? mappingName = null)
+        public virtual TModel Get<TEntity, TModel>(int id, string? mappingName = null)
             where TEntity : class, IEntity
         {
             return QueryOne<TEntity, TModel>(id, mappingName).FirstOrDefault();
         }
 
-        public TModel Get<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
+        public virtual TModel Get<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
             where TEntity : class, IEntity
             where TArgs: class
         {
             return QueryOne<TEntity, TModel, TArgs>(id, args, mappingName).FirstOrDefault();
         }
 
-        public Task<TModel> GetAsync<TEntity, TModel>(int id, string? mappingName = null)
+        public virtual Task<TModel> GetAsync<TEntity, TModel>(int id, string? mappingName = null)
             where TEntity : class, IEntity
         {
             return QueryOne<TEntity, TModel>(id, mappingName).FirstOrDefaultAsync();
         }
 
-        public Task<TModel> GetAsync<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
+        public virtual Task<TModel> GetAsync<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
             where TEntity : class, IEntity
             where TArgs: class
         {
@@ -222,41 +222,41 @@ namespace DevTeam.GenericService
 
         #region Get Property
 
-        public TProperty GetProperty<TEntity, TProperty>(Expression<Func<TEntity, bool>> filter,
+        public virtual TProperty GetProperty<TEntity, TProperty>(Expression<Func<TEntity, bool>> filter,
                                                          Expression<Func<TEntity, TProperty>> selector)
             where TEntity : class
         {
             return _readRepository.GetProperty(filter, selector);
         }
 
-        public Task<TProperty> GetPropertyAsync<TEntity, TProperty>(Expression<Func<TEntity, bool>> filter,
+        public virtual Task<TProperty> GetPropertyAsync<TEntity, TProperty>(Expression<Func<TEntity, bool>> filter,
                                                                     Expression<Func<TEntity, TProperty>> selector)
             where TEntity : class
         {
             return _readRepository.GetPropertyAsync(filter, selector);
         }
 
-        public TProperty GetProperty<TEntity, TProperty, TKey>(TKey id, Expression<Func<TEntity, TProperty>> selector)
+        public virtual TProperty GetProperty<TEntity, TProperty, TKey>(TKey id, Expression<Func<TEntity, TProperty>> selector)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
             return _readRepository.GetProperty(id, selector);
         }
 
-        public Task<TProperty> GetPropertyAsync<TEntity, TProperty, TKey>(TKey id, Expression<Func<TEntity, TProperty>> selector)
+        public virtual Task<TProperty> GetPropertyAsync<TEntity, TProperty, TKey>(TKey id, Expression<Func<TEntity, TProperty>> selector)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
             return _readRepository.GetPropertyAsync(id, selector);
         }
 
-        public TProperty GetProperty<TEntity, TProperty>(int id, Expression<Func<TEntity, TProperty>> selector)
+        public virtual TProperty GetProperty<TEntity, TProperty>(int id, Expression<Func<TEntity, TProperty>> selector)
             where TEntity : class, IEntity
         {
             return _readRepository.GetProperty(id, selector);
         }
 
-        public Task<TProperty> GetPropertyAsync<TEntity, TProperty>(int id, Expression<Func<TEntity, TProperty>> selector)
+        public virtual Task<TProperty> GetPropertyAsync<TEntity, TProperty>(int id, Expression<Func<TEntity, TProperty>> selector)
             where TEntity : class, IEntity
         {
             return _readRepository.GetPropertyAsync(id, selector);
@@ -266,13 +266,13 @@ namespace DevTeam.GenericService
 
         #region Any
 
-        public bool Any<TEntity>(Expression<Func<TEntity, bool>>? filter = null)
+        public virtual bool Any<TEntity>(Expression<Func<TEntity, bool>>? filter = null)
             where TEntity : class
         {
             return _readRepository.Any(filter);
         }
 
-        public Task<bool> AnyAsync<TEntity>(Expression<Func<TEntity, bool>>? filter = null)
+        public virtual Task<bool> AnyAsync<TEntity>(Expression<Func<TEntity, bool>>? filter = null)
             where TEntity : class
         {
             return _readRepository.AnyAsync(filter);
@@ -282,7 +282,7 @@ namespace DevTeam.GenericService
 
         #region Add
 
-        public TEntity Add<TModel, TEntity>(TModel model, string? addMappingName = null)
+        public virtual TEntity Add<TModel, TEntity>(TModel model, string? addMappingName = null)
             where TEntity : class
         {
             var entity = _mappings.Map<TModel, TEntity>(model, addMappingName);
@@ -293,7 +293,7 @@ namespace DevTeam.GenericService
             return entity;
         }
 
-        public TEntity Add<TModel, TEntity, TArgs>(TModel model, TArgs addMappingArgs, string? addMappingName = null)
+        public virtual TEntity Add<TModel, TEntity, TArgs>(TModel model, TArgs addMappingArgs, string? addMappingName = null)
             where TEntity : class
             where TArgs : class
         {
@@ -305,7 +305,7 @@ namespace DevTeam.GenericService
             return entity;
         }
 
-        public TResult Add<TModel, TEntity, TResult, TKey>(TModel model, string? addMappingName = null, string? getMappingName = null)
+        public virtual TResult Add<TModel, TEntity, TResult, TKey>(TModel model, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey: IEquatable<TKey>
         {
@@ -313,13 +313,13 @@ namespace DevTeam.GenericService
             return Get<TEntity, TResult, TKey>(entity.Id, getMappingName);
         }
 
-        public TResult Add<TModel, TEntity, TResult>(TModel model, string? addMappingName = null, string? getMappingName = null)
+        public virtual TResult Add<TModel, TEntity, TResult>(TModel model, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity
         {
             return Add<TModel, TEntity, TResult, int>(model, addMappingName, getMappingName);
         }
 
-        public async Task<TEntity> AddAsync<TModel, TEntity>(TModel model, string? addMappingName = null)
+        public virtual async Task<TEntity> AddAsync<TModel, TEntity>(TModel model, string? addMappingName = null)
             where TEntity : class
         {
             var entity = _mappings.Map<TModel, TEntity>(model, addMappingName);
@@ -330,7 +330,7 @@ namespace DevTeam.GenericService
             return entity;
         }
 
-        public async Task<TEntity> AddAsync<TModel, TEntity, TArgs>(TModel model, TArgs args, string? addMappingName = null)
+        public virtual async Task<TEntity> AddAsync<TModel, TEntity, TArgs>(TModel model, TArgs args, string? addMappingName = null)
             where TEntity : class
             where TArgs : class
         {
@@ -342,7 +342,7 @@ namespace DevTeam.GenericService
             return entity;
         }
 
-        public async Task<TResult> AddAsync<TModel, TEntity, TResult, TKey>(TModel model, string? addMappingName = null, string? getMappingName = null)
+        public virtual async Task<TResult> AddAsync<TModel, TEntity, TResult, TKey>(TModel model, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
@@ -350,7 +350,7 @@ namespace DevTeam.GenericService
             return await GetAsync<TEntity, TResult, TKey>(entity.Id, getMappingName);
         }
 
-        public Task<TResult> AddAsync<TModel, TEntity, TResult>(TModel model, string? addMappingName = null, string? getMappingName = null)
+        public virtual Task<TResult> AddAsync<TModel, TEntity, TResult>(TModel model, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity
         {
             return AddAsync<TModel, TEntity, TResult, int>(model, addMappingName, getMappingName);
@@ -360,7 +360,7 @@ namespace DevTeam.GenericService
 
         #region AddRange
 
-        public List<TEntity> AddRange<TModel, TEntity>(List<TModel> models, string? addMappingName = null)
+        public virtual List<TEntity> AddRange<TModel, TEntity>(List<TModel> models, string? addMappingName = null)
             where TEntity : class
         {
             var entities = _mappings.Map<TModel, TEntity>(models, addMappingName);
@@ -371,7 +371,7 @@ namespace DevTeam.GenericService
             return entities;
         }
 
-        public List<TEntity> AddRange<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
+        public virtual List<TEntity> AddRange<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
             where TEntity : class
             where TArgs : class
         {
@@ -383,7 +383,7 @@ namespace DevTeam.GenericService
             return entities;
         }
 
-        public List<TResult> AddRange<TModel, TEntity, TResult, TKey>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
+        public virtual List<TResult> AddRange<TModel, TEntity, TResult, TKey>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
@@ -395,13 +395,13 @@ namespace DevTeam.GenericService
             return results;
         }
 
-        public List<TResult> AddRange<TModel, TEntity, TResult>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
+        public virtual List<TResult> AddRange<TModel, TEntity, TResult>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity
         {
             return AddRange<TModel, TEntity, TResult, int>(models, addMappingName, getMappingName);
         }
 
-        public async Task<List<TEntity>> AddRangeAsync<TModel, TEntity>(List<TModel> models, string? addMappingName = null)
+        public virtual async Task<List<TEntity>> AddRangeAsync<TModel, TEntity>(List<TModel> models, string? addMappingName = null)
             where TEntity : class
         {
             var entities = _mappings.Map<TModel, TEntity>(models, addMappingName);
@@ -412,7 +412,7 @@ namespace DevTeam.GenericService
             return entities;
         }
 
-        public async Task<List<TEntity>> AddRangeAsync<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
+        public virtual async Task<List<TEntity>> AddRangeAsync<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
             where TEntity : class
             where TArgs : class
         {
@@ -424,7 +424,7 @@ namespace DevTeam.GenericService
             return entities;
         }
 
-        public async Task<List<TResult>> AddRangeAsync<TModel, TEntity, TResult, TKey>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
+        public virtual async Task<List<TResult>> AddRangeAsync<TModel, TEntity, TResult, TKey>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
@@ -436,7 +436,7 @@ namespace DevTeam.GenericService
             return results;
         }
 
-        public Task<List<TResult>> AddRangeAsync<TModel, TEntity, TResult>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
+        public virtual Task<List<TResult>> AddRangeAsync<TModel, TEntity, TResult>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
             where TEntity : class, IEntity
         {
             return AddRangeAsync<TModel, TEntity, TResult, int>(models, addMappingName, getMappingName);
@@ -446,7 +446,7 @@ namespace DevTeam.GenericService
 
         #region Update
 
-        public TEntity Update<TModel, TEntity, TKey>(TKey id, TModel model, Action<TModel, TEntity> updateFunc)
+        public virtual TEntity Update<TModel, TEntity, TKey>(TKey id, TModel model, Action<TModel, TEntity> updateFunc)
             where TEntity : class, IEntity<TKey>
             where TKey: IEquatable<TKey>
         {
@@ -457,7 +457,7 @@ namespace DevTeam.GenericService
             return entity;
         }
 
-        public TResult Update<TModel, TEntity, TResult, TKey>(TKey id, TModel model, Action<TModel, TEntity> updateFunc)
+        public virtual TResult Update<TModel, TEntity, TResult, TKey>(TKey id, TModel model, Action<TModel, TEntity> updateFunc)
             where TEntity : class, IEntity<TKey>
             where TKey: IEquatable<TKey>
         {
@@ -465,14 +465,14 @@ namespace DevTeam.GenericService
             return Get<TEntity, TResult, TKey>(id);
         }
 
-        public TResult Update<TModel, TEntity, TResult>(int id, TModel model, Action<TModel, TEntity> updateFunc)
+        public virtual TResult Update<TModel, TEntity, TResult>(int id, TModel model, Action<TModel, TEntity> updateFunc)
             where TEntity : class, IEntity
         {
             Update(id, model, updateFunc);
             return Get<TEntity, TResult>(id);
         }
 
-        public async Task<TEntity> UpdateAsync<TModel, TEntity, TKey>(TKey id, TModel model, Action<TModel, TEntity> updateFunc)
+        public virtual async Task<TEntity> UpdateAsync<TModel, TEntity, TKey>(TKey id, TModel model, Action<TModel, TEntity> updateFunc)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
@@ -483,7 +483,7 @@ namespace DevTeam.GenericService
             return entity;
         }
 
-        public async Task<TResult> UpdateAsync<TModel, TEntity, TResult, TKey>(TKey id, TModel model, Action<TModel, TEntity> updateFunc)
+        public virtual async Task<TResult> UpdateAsync<TModel, TEntity, TResult, TKey>(TKey id, TModel model, Action<TModel, TEntity> updateFunc)
             where TEntity : class, IEntity<TKey>
             where TKey : IEquatable<TKey>
         {
@@ -491,7 +491,7 @@ namespace DevTeam.GenericService
             return await GetAsync<TEntity, TResult, TKey>(id);
         }
 
-        public async Task<TResult> UpdateAsync<TModel, TEntity, TResult>(int id, TModel model, Action<TModel, TEntity> updateFunc)
+        public virtual async Task<TResult> UpdateAsync<TModel, TEntity, TResult>(int id, TModel model, Action<TModel, TEntity> updateFunc)
             where TEntity : class, IEntity
         {
             await UpdateAsync(id, model, updateFunc);
@@ -502,28 +502,28 @@ namespace DevTeam.GenericService
 
         #region Delete
 
-        public int Delete<TEntity>(int id)
+        public virtual int Delete<TEntity>(int id)
             where TEntity : class, IEntity
         {
             _writeRepository.Delete<TEntity>(id);
             return _writeRepository.Save();
         } 
 
-        public int Delete<TEntity>(Expression<Func<TEntity, bool>> filter)
+        public virtual int Delete<TEntity>(Expression<Func<TEntity, bool>> filter)
             where TEntity : class
         {
             _writeRepository.Delete(filter);
             return _writeRepository.Save();
         }
         
-        public async Task<int> DeleteAsync<TEntity>(int id)
+        public virtual async Task<int> DeleteAsync<TEntity>(int id)
             where TEntity : class, IEntity
         {
             await _writeRepository.DeleteAsync<TEntity>(id);
             return await _writeRepository.SaveAsync();
         }
 
-        public async Task<int> DeleteAsync<TEntity>(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<int> DeleteAsync<TEntity>(Expression<Func<TEntity, bool>> filter)
             where TEntity : class
         {
             await _writeRepository.DeleteAsync(filter);
@@ -534,14 +534,14 @@ namespace DevTeam.GenericService
 
         #region Delete Range
 
-        public int DeleteRange<TEntity>(Expression<Func<TEntity, bool>> filter)
+        public virtual int DeleteRange<TEntity>(Expression<Func<TEntity, bool>> filter)
             where TEntity : class
         {
             _writeRepository.DeleteRange(filter);
             return _writeRepository.Save();
         }
 
-        public async Task<int> DeleteRangeAsync<TEntity>(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<int> DeleteRangeAsync<TEntity>(Expression<Func<TEntity, bool>> filter)
             where TEntity : class
         {
             await _writeRepository.DeleteRangeAsync(filter);
