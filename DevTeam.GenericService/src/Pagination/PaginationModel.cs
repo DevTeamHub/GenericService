@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace DevTeam.GenericService.Pagination
+namespace DevTeam.GenericService.Pagination;
+
+public class PaginationModel<TModel>
 {
-    public class PaginationModel<TModel>
+    public List<TModel> List { get; }
+    public int Count { get; }
+
+    public PaginationModel(List<TModel> list, int count)
     {
-        public List<TModel> List { get; set; }
-        public int Count { get; set; }
+        List = list;
+        Count = count;
     }
 }

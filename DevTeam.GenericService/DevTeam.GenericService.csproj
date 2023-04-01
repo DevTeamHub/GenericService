@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>DevTeam.GenericService</PackageId>
-	<Version>3.4.3</Version>
+	<Version>3.4.5</Version>
 	<Authors>dimabezzubenkov, dev-team</Authors>
 	<Company>Dev Team, Inc</Company>
 	<Copyright>Copyright (c) Dev Team, Inc 2021.</Copyright>
@@ -17,6 +17,7 @@
 	<RepositoryType>git</RepositoryType>
 	<PackageTags>Repository;EntityFramework;IQueryable;</PackageTags>
 	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+	<LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
