@@ -1,4 +1,4 @@
-﻿using DevTeam.EntityFrameworkExtensions;
+﻿using DevTeam.Extensions.EntityFramework;
 using DevTeam.GenericRepository;
 using DevTeam.GenericService.Pagination;
 using DevTeam.QueryMappings.Services.Interfaces;
@@ -69,11 +69,17 @@ public class GenericService<TContext> : IGenericService<TContext>
         return _mappings.Map<TEntity, TModel>(query, mappingName);
     }
 
-    public virtual IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
+    public virtual IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(TArgs args, string? mappingName = null)
         where TEntity : class
-        where TArgs : class
     {
-        var query = _readRepository.GetList(filter);
+        var query = _readRepository.Query<TEntity, TArgs>(args);
+        return _mappings.Map<TEntity, TModel, TArgs>(query, args, mappingName);
+    }
+
+    public virtual IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+        where TEntity : class
+    {
+        var query = _readRepository.GetList(filter, args);
         return _mappings.Map<TEntity, TModel, TArgs>(query, args, mappingName);
     }
 
@@ -83,9 +89,14 @@ public class GenericService<TContext> : IGenericService<TContext>
         return QueryList<TEntity, TModel>(filter, mappingName).ToList();
     }
 
-    public virtual List<TModel> GetList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
+    public virtual List<TModel> GetList<TEntity, TModel, TArgs>(TArgs args, string? mappingName = null)
         where TEntity : class
-        where TArgs : class
+    {
+        return QueryList<TEntity, TModel, TArgs>(args, mappingName).ToList();
+    }
+
+    public virtual List<TModel> GetList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+        where TEntity : class
     {
         return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).ToList();
     }
@@ -96,9 +107,14 @@ public class GenericService<TContext> : IGenericService<TContext>
         return QueryList<TEntity, TModel>(filter, mappingName).ToListAsync();
     }
 
-    public virtual Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
+    public virtual Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(TArgs args, string? mappingName = null)
         where TEntity : class
-        where TArgs : class
+    {
+        return QueryList<TEntity, TModel, TArgs>(args, mappingName).ToListAsync();
+    }
+
+    public virtual Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+        where TEntity : class
     {
         return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).ToListAsync();
     }
@@ -119,7 +135,6 @@ public class GenericService<TContext> : IGenericService<TContext>
     public virtual Task<List<TModel>> Search<TEntity, TModel, TSearchModel, TArgs>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, TArgs args, string? mappingName = null)
         where TEntity : class
         where TSearchModel : PaginationParams
-        where TArgs : class
     {
         var query = ApplyFilter(searchService, searchModel);
         query = ApplyPagination(query, searchModel);
@@ -144,7 +159,6 @@ public class GenericService<TContext> : IGenericService<TContext>
     public virtual async Task<PaginationModel<TModel>> Pagination<TEntity, TModel, TSearchModel, TArgs>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, TArgs args, string? mappingName = null)
         where TEntity : class
         where TSearchModel : PaginationParams
-        where TArgs : class
     {
         var query = ApplyFilter(searchService, searchModel);
 
@@ -192,7 +206,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual IQueryable<TModel> QueryOne<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
-        where TArgs : class
         where TKey : IEquatable<TKey>
     {
         var query = _readRepository.QueryOne<TEntity, TKey>(id);
@@ -207,7 +220,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual IQueryable<TModel> QueryOne<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity
-        where TArgs : class
     {
         return QueryOne<TEntity, TModel, TArgs, int>(id, args, mappingName);
     }
@@ -220,7 +232,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual TModel Get<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
         where TEntity : class
-        where TArgs : class
     {
         return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).FirstOrDefault();
     }
@@ -233,7 +244,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual Task<TModel> GetAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
         where TEntity : class
-        where TArgs : class
     {
         return QueryList<TEntity, TModel, TArgs>(filter, args, mappingName).FirstOrDefaultAsync();
     }
@@ -247,7 +257,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual TModel Get<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
-        where TArgs : class
         where TKey : IEquatable<TKey>
     {
         return QueryOne<TEntity, TModel, TArgs, TKey>(id, args, mappingName).FirstOrDefault();
@@ -262,7 +271,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual Task<TModel> GetAsync<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
-        where TArgs : class
         where TKey : IEquatable<TKey>
     {
         return QueryOne<TEntity, TModel, TArgs, TKey>(id, args, mappingName).FirstOrDefaultAsync();
@@ -276,7 +284,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual TModel Get<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity
-        where TArgs : class
     {
         return QueryOne<TEntity, TModel, TArgs>(id, args, mappingName).FirstOrDefault();
     }
@@ -289,7 +296,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual Task<TModel> GetAsync<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity
-        where TArgs : class
     {
         return QueryOne<TEntity, TModel, TArgs>(id, args, mappingName).FirstOrDefaultAsync();
     }
@@ -371,7 +377,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual TEntity Add<TModel, TEntity, TArgs>(TModel model, TArgs addMappingArgs, string? addMappingName = null)
         where TEntity : class
-        where TArgs : class
     {
         var entity = _mappings.Map<TModel, TEntity, TArgs>(model, addMappingArgs, addMappingName);
 
@@ -408,7 +413,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual async Task<TEntity> AddAsync<TModel, TEntity, TArgs>(TModel model, TArgs args, string? addMappingName = null)
         where TEntity : class
-        where TArgs : class
     {
         var entity = _mappings.Map<TModel, TEntity, TArgs>(model, args, addMappingName);
 
@@ -449,7 +453,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual List<TEntity> AddRange<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
         where TEntity : class
-        where TArgs : class
     {
         var entities = _mappings.Map<TModel, TEntity, TArgs>(models, args, addMappingName);
 
@@ -490,7 +493,6 @@ public class GenericService<TContext> : IGenericService<TContext>
 
     public virtual async Task<List<TEntity>> AddRangeAsync<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
         where TEntity : class
-        where TArgs : class
     {
         var entities = _mappings.Map<TModel, TEntity, TArgs>(models, args, addMappingName);
 

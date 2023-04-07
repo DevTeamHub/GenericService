@@ -1,4 +1,4 @@
-﻿using DevTeam.EntityFrameworkExtensions;
+﻿using DevTeam.Extensions.EntityFramework;
 using DevTeam.GenericService.Pagination;
 using System;
 using System.Collections.Generic;
@@ -23,61 +23,57 @@ public interface IGenericService<TContext>
 {
     IQueryable<TModel> QueryList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
         where TEntity : class;
-    IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
-        where TEntity : class
-        where TArgs : class;
+    IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(TArgs args, string? mappingName = null)
+        where TEntity : class;
+    IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+        where TEntity : class;
     List<TModel> GetList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
         where TEntity : class;
-    List<TModel> GetList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
-        where TEntity : class
-        where TArgs : class;
+    List<TModel> GetList<TEntity, TModel, TArgs>(TArgs args, string? mappingName = null)
+        where TEntity : class;
+    List<TModel> GetList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+        where TEntity : class;
     Task<List<TModel>> GetListAsync<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
         where TEntity : class;
-    Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>>? filter = null, TArgs? args = null, string? mappingName = null)
-        where TEntity : class
-        where TArgs : class;
+    Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(TArgs args, string? mappingName = null)
+        where TEntity : class;
+    Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
+        where TEntity : class;
     Task<List<TModel>> Search<TEntity, TModel, TSearchModel>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, string? mappingName = null)
         where TEntity : class
         where TSearchModel : PaginationParams;
     Task<List<TModel>> Search<TEntity, TModel, TSearchModel, TArgs>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, TArgs args, string? mappingName = null)
         where TEntity : class
-        where TSearchModel : PaginationParams
-        where TArgs : class;
+        where TSearchModel : PaginationParams;
     Task<PaginationModel<TModel>> Pagination<TEntity, TModel, TSearchModel>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, string? mappingName = null)
         where TEntity : class
         where TSearchModel : PaginationParams;
     Task<PaginationModel<TModel>> Pagination<TEntity, TModel, TSearchModel, TArgs>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, TArgs args, string? mappingName = null)
         where TEntity : class
-        where TSearchModel : PaginationParams
-        where TArgs : class;
+        where TSearchModel : PaginationParams;
     IQueryable<TModel> QueryOne<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>;
     IQueryable<TModel> QueryOne<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
-        where TArgs : class
         where TKey : IEquatable<TKey>;
     IQueryable<TModel> QueryOne<TEntity, TModel>(int id, string? mappingName = null)
         where TEntity : class, IEntity;
     IQueryable<TModel> QueryOne<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
-        where TEntity : class, IEntity
-        where TArgs : class;
+        where TEntity : class, IEntity;
     TModel Get<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
         where TEntity : class;
     TModel Get<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
-        where TEntity : class
-        where TArgs : class;
+        where TEntity : class;
     Task<TModel> GetAsync<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
         where TEntity : class;
     Task<TModel> GetAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
-        where TEntity : class
-        where TArgs : class;
+        where TEntity : class;
     TModel Get<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>;
     TModel Get<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
-        where TArgs : class
         where TKey : IEquatable<TKey>;
     Task<TModel> GetAsync<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
@@ -85,13 +81,11 @@ public interface IGenericService<TContext>
     TModel Get<TEntity, TModel>(int id, string? mappingName = null)
         where TEntity : class, IEntity;
     TModel Get<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
-        where TEntity : class, IEntity
-        where TArgs : class;
+        where TEntity : class, IEntity;
     Task<TModel> GetAsync<TEntity, TModel>(int id, string? mappingName = null)
         where TEntity : class, IEntity;
     Task<TModel> GetAsync<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
-        where TEntity : class, IEntity
-        where TArgs : class;
+        where TEntity : class, IEntity;
     TProperty GetProperty<TEntity, TProperty>(Expression<Func<TEntity, bool>> filter,
                                               Expression<Func<TEntity, TProperty>> selector)
         where TEntity : class;
@@ -115,8 +109,7 @@ public interface IGenericService<TContext>
     TEntity Add<TModel, TEntity>(TModel model, string? addMappingName = null)
         where TEntity : class;
     TEntity Add<TModel, TEntity, TArgs>(TModel model, TArgs args, string? addMappingName = null)
-        where TEntity : class
-        where TArgs : class;
+        where TEntity : class;
     TResult Add<TModel, TEntity, TResult, TKey>(TModel model, string? addMappingName = null, string? getMappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>;
@@ -125,8 +118,7 @@ public interface IGenericService<TContext>
     Task<TEntity> AddAsync<TModel, TEntity>(TModel model, string? addMappingName = null)
         where TEntity : class;
     Task<TEntity> AddAsync<TModel, TEntity, TArgs>(TModel model, TArgs args, string? addMappingName = null)
-        where TEntity : class
-        where TArgs : class;
+        where TEntity : class;
     Task<TResult> AddAsync<TModel, TEntity, TResult, TKey>(TModel model, string? addMappingName = null, string? getMappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>;
@@ -135,8 +127,7 @@ public interface IGenericService<TContext>
     List<TEntity> AddRange<TModel, TEntity>(List<TModel> models, string? addMappingName = null)
         where TEntity : class;
     List<TEntity> AddRange<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
-        where TEntity : class
-        where TArgs : class;
+        where TEntity : class;
     List<TResult> AddRange<TModel, TEntity, TResult, TKey>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>;
@@ -145,8 +136,7 @@ public interface IGenericService<TContext>
     Task<List<TEntity>> AddRangeAsync<TModel, TEntity>(List<TModel> models, string? addMappingName = null)
         where TEntity : class;
     Task<List<TEntity>> AddRangeAsync<TModel, TEntity, TArgs>(List<TModel> models, TArgs args, string? addMappingName = null)
-        where TEntity : class
-        where TArgs : class;
+        where TEntity : class;
     Task<List<TResult>> AddRangeAsync<TModel, TEntity, TResult, TKey>(List<TModel> models, string? addMappingName = null, string? getMappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>;

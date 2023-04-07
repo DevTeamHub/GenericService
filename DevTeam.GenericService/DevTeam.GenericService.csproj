@@ -6,10 +6,10 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>DevTeam.GenericService</PackageId>
-	<Version>3.4.5</Version>
+	<Version>3.5.0</Version>
 	<Authors>dimabezzubenkov, dev-team</Authors>
 	<Company>Dev Team, Inc</Company>
-	<Copyright>Copyright (c) Dev Team, Inc 2021.</Copyright>
+	<Copyright>Copyright (c) Dev Team, Inc 2023.</Copyright>
     <Description>Package provides integration between Generic Repository and Query Mappings for Entity Framework</Description>
     <PackageIcon>icon.png</PackageIcon>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevTeam.GenericRepository" Version="3.4.3" />
-    <PackageReference Include="DevTeam.QueryMappings" Version="3.3.0" />
+    <PackageReference Include="DevTeam.GenericRepository" Version="3.5.0" />
+    <PackageReference Include="DevTeam.QueryMappings" Version="3.5.1" />
   </ItemGroup>
 
 </Project>
