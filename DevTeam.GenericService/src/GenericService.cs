@@ -178,7 +178,7 @@ public class GenericService<TContext> : IGenericService<TContext>
         searchModel.Skip ??= 0;
         searchModel.Take ??= 20;
 
-        var query = _readRepository.Query<TEntity>();
+        var query = _readRepository.Query<TEntity, TSearchModel>(searchModel);
 
         query = searchService.Filter(query, searchModel);
 
@@ -204,11 +204,11 @@ public class GenericService<TContext> : IGenericService<TContext>
         return _mappings.Map<TEntity, TModel>(query, mappingName);
     }
 
-    public virtual IQueryable<TModel> QueryOne<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
+    public virtual IQueryable<TModel> QueryOne<TEntity, TModel, TKey, TArgs>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
-        var query = _readRepository.QueryOne<TEntity, TKey>(id);
+        var query = _readRepository.QueryOne<TEntity, TKey, TArgs>(id, args);
         return _mappings.Map<TEntity, TModel, TArgs>(query, args, mappingName);
     }
 
@@ -221,7 +221,7 @@ public class GenericService<TContext> : IGenericService<TContext>
     public virtual IQueryable<TModel> QueryOne<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity
     {
-        return QueryOne<TEntity, TModel, TArgs, int>(id, args, mappingName);
+        return QueryOne<TEntity, TModel, int, TArgs>(id, args, mappingName);
     }
 
     public virtual TModel Get<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
@@ -255,11 +255,11 @@ public class GenericService<TContext> : IGenericService<TContext>
         return QueryOne<TEntity, TModel, TKey>(id, mappingName).FirstOrDefault();
     }
 
-    public virtual TModel Get<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
+    public virtual TModel Get<TEntity, TModel, TKey, TArgs>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
-        return QueryOne<TEntity, TModel, TArgs, TKey>(id, args, mappingName).FirstOrDefault();
+        return QueryOne<TEntity, TModel, TKey, TArgs>(id, args, mappingName).FirstOrDefault();
     }
 
     public virtual Task<TModel> GetAsync<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
@@ -269,11 +269,11 @@ public class GenericService<TContext> : IGenericService<TContext>
         return QueryOne<TEntity, TModel, TKey>(id, mappingName).FirstOrDefaultAsync();
     }
 
-    public virtual Task<TModel> GetAsync<TEntity, TModel, TArgs, TKey>(TKey id, TArgs args, string? mappingName = null)
+    public virtual Task<TModel> GetAsync<TEntity, TModel, TKey, TArgs>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
-        return QueryOne<TEntity, TModel, TArgs, TKey>(id, args, mappingName).FirstOrDefaultAsync();
+        return QueryOne<TEntity, TModel, TKey, TArgs>(id, args, mappingName).FirstOrDefaultAsync();
     }
 
     public virtual TModel Get<TEntity, TModel>(int id, string? mappingName = null)
@@ -305,17 +305,33 @@ public class GenericService<TContext> : IGenericService<TContext>
     #region Get Property
 
     public virtual TProperty GetProperty<TEntity, TProperty>(Expression<Func<TEntity, bool>> filter,
-                                                     Expression<Func<TEntity, TProperty>> selector)
+                                                             Expression<Func<TEntity, TProperty>> selector)
         where TEntity : class
     {
         return _readRepository.GetProperty(filter, selector);
     }
 
+    public virtual TProperty GetProperty<TEntity, TProperty, TArgs>(Expression<Func<TEntity, bool>> filter,
+                                                                    Expression<Func<TEntity, TProperty>> selector,
+                                                                    TArgs args)
+        where TEntity : class
+    {
+        return _readRepository.GetProperty(filter, selector, args);
+    }
+
     public virtual Task<TProperty> GetPropertyAsync<TEntity, TProperty>(Expression<Func<TEntity, bool>> filter,
-                                                                Expression<Func<TEntity, TProperty>> selector)
+                                                                        Expression<Func<TEntity, TProperty>> selector)
         where TEntity : class
     {
         return _readRepository.GetPropertyAsync(filter, selector);
+    }
+
+    public virtual Task<TProperty> GetPropertyAsync<TEntity, TProperty, TArgs>(Expression<Func<TEntity, bool>> filter,
+                                                                               Expression<Func<TEntity, TProperty>> selector,
+                                                                               TArgs args)
+        where TEntity : class
+    {
+        return _readRepository.GetPropertyAsync(filter, selector, args);
     }
 
     public virtual TProperty GetProperty<TEntity, TProperty, TKey>(TKey id, Expression<Func<TEntity, TProperty>> selector)
@@ -325,11 +341,25 @@ public class GenericService<TContext> : IGenericService<TContext>
         return _readRepository.GetProperty(id, selector);
     }
 
+    public virtual TProperty GetProperty<TEntity, TProperty, TKey, TArgs>(TKey id, Expression<Func<TEntity, TProperty>> selector, TArgs args)
+        where TEntity : class, IEntity<TKey>
+        where TKey : IEquatable<TKey>
+    {
+        return _readRepository.GetProperty(id, selector, args);
+    }
+
     public virtual Task<TProperty> GetPropertyAsync<TEntity, TProperty, TKey>(TKey id, Expression<Func<TEntity, TProperty>> selector)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
         return _readRepository.GetPropertyAsync(id, selector);
+    }
+
+    public virtual Task<TProperty> GetPropertyAsync<TEntity, TProperty, TKey, TArgs>(TKey id, Expression<Func<TEntity, TProperty>> selector, TArgs args)
+        where TEntity : class, IEntity<TKey>
+        where TKey : IEquatable<TKey>
+    {
+        return _readRepository.GetPropertyAsync(id, selector, args);
     }
 
     public virtual TProperty GetProperty<TEntity, TProperty>(int id, Expression<Func<TEntity, TProperty>> selector)
@@ -338,10 +368,22 @@ public class GenericService<TContext> : IGenericService<TContext>
         return _readRepository.GetProperty(id, selector);
     }
 
+    public virtual TProperty GetProperty<TEntity, TProperty, TArgs>(int id, Expression<Func<TEntity, TProperty>> selector, TArgs args)
+        where TEntity : class, IEntity
+    {
+        return _readRepository.GetProperty(id, selector, args);
+    }
+
     public virtual Task<TProperty> GetPropertyAsync<TEntity, TProperty>(int id, Expression<Func<TEntity, TProperty>> selector)
         where TEntity : class, IEntity
     {
         return _readRepository.GetPropertyAsync(id, selector);
+    }
+
+    public virtual Task<TProperty> GetPropertyAsync<TEntity, TProperty, TArgs>(int id, Expression<Func<TEntity, TProperty>> selector, TArgs args)
+        where TEntity : class, IEntity
+    {
+        return _readRepository.GetPropertyAsync(id, selector, args);
     }
 
     #endregion
@@ -354,10 +396,34 @@ public class GenericService<TContext> : IGenericService<TContext>
         return _readRepository.Any(filter);
     }
 
+    public virtual bool Any<TEntity, TArgs>(TArgs args)
+        where TEntity : class
+    {
+        return _readRepository.Any<TEntity, TArgs>(args);
+    }
+
+    public virtual bool Any<TEntity, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args)
+        where TEntity : class
+    {
+        return _readRepository.Any(filter, args);
+    }
+
     public virtual Task<bool> AnyAsync<TEntity>(Expression<Func<TEntity, bool>>? filter = null)
         where TEntity : class
     {
         return _readRepository.AnyAsync(filter);
+    }
+
+    public virtual Task<bool> AnyAsync<TEntity, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args)
+        where TEntity : class
+    {
+        return _readRepository.AnyAsync(filter, args);
+    }
+
+    public virtual Task<bool> AnyAsync<TEntity, TArgs>(TArgs args)
+        where TEntity : class
+    {
+        return _readRepository.AnyAsync<TEntity, TArgs>(args);
     }
 
     #endregion
@@ -574,6 +640,86 @@ public class GenericService<TContext> : IGenericService<TContext>
     {
         await UpdateAsync(id, model, updateFunc);
         return await GetAsync<TEntity, TResult>(id);
+    }
+
+    public virtual void UpdateProperty<TEntity, TProperty>(Expression<Func<TEntity, bool>> selector,
+                                                           Expression<Func<TEntity, TProperty>> propertySelector,
+                                                           TProperty value)
+        where TEntity : class
+    {
+        _writeRepository.UpdateProperty(selector, propertySelector, value);
+    }
+
+    public virtual void UpdateProperty<TEntity, TProperty, TKey>(TKey id, Expression<Func<TEntity, TProperty>> propertySelector, TProperty value)
+        where TEntity : class, IEntity<TKey>
+        where TKey : IEquatable<TKey>
+    {
+        _writeRepository.UpdateProperty(id, propertySelector, value);
+    }
+
+    public virtual void UpdateProperty<TEntity, TProperty>(int id, Expression<Func<TEntity, TProperty>> propertySelector, TProperty value)
+        where TEntity : class, IEntity
+    {
+        _writeRepository.UpdateProperty(id, propertySelector, value);
+    }
+
+    public virtual void UpdateProperty<TEntity>(Expression<Func<TEntity, bool>> selector, string propertyName, object value)
+        where TEntity : class
+    {
+        _writeRepository.UpdateProperty(selector, propertyName, value);
+    }
+
+    public virtual void UpdateProperty<TEntity, TKey>(TKey id, string propertyName, object value)
+        where TEntity : class, IEntity<TKey>
+        where TKey : IEquatable<TKey>
+    {
+        _writeRepository.UpdateProperty<TEntity, TKey>(id, propertyName, value);
+    }
+
+    public virtual void UpdateProperty<TEntity>(int id, string propertyName, object value)
+        where TEntity : class, IEntity
+    {
+        UpdateProperty<TEntity, int>(id, propertyName, value);
+    }
+
+    public virtual Task UpdatePropertyAsync<TEntity, TProperty>(Expression<Func<TEntity, bool>> selector,
+                                                                Expression<Func<TEntity, TProperty>> propertySelector,
+                                                                TProperty value)
+        where TEntity : class
+    {
+        return _writeRepository.UpdatePropertyAsync(selector, propertySelector, value);
+    }
+
+    public virtual Task UpdatePropertyAsync<TEntity, TProperty, TKey>(TKey id, Expression<Func<TEntity, TProperty>> propertySelector, TProperty value)
+        where TEntity : class, IEntity<TKey>
+        where TKey : IEquatable<TKey>
+    {
+        return _writeRepository.UpdatePropertyAsync(id, propertySelector, value);
+    }
+
+    public virtual Task UpdatePropertyAsync<TEntity, TProperty>(int id, Expression<Func<TEntity, TProperty>> propertySelector, TProperty value)
+        where TEntity : class, IEntity
+    {
+        return _writeRepository.UpdatePropertyAsync(id, propertySelector, value);
+    }
+
+    public virtual Task UpdatePropertyAsync<TEntity>(Expression<Func<TEntity, bool>> selector, string propertyName, object value)
+        where TEntity : class
+    {
+        return _writeRepository.UpdatePropertyAsync(selector, propertyName, value);
+    }
+
+    public virtual Task UpdatePropertyAsync<TEntity, TKey>(TKey id, string propertyName, object value)
+        where TEntity : class, IEntity<TKey>
+        where TKey : IEquatable<TKey>
+    {
+        return _writeRepository.UpdatePropertyAsync<TEntity, TKey>(id, propertyName, value);
+    }
+
+    public virtual Task UpdatePropertyAsync<TEntity>(int id, string propertyName, object value)
+        where TEntity : class, IEntity
+    {
+        return _writeRepository.UpdatePropertyAsync<TEntity, int>(id, propertyName, value);
     }
 
     #endregion
