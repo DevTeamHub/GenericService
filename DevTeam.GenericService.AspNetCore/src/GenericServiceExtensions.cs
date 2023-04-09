@@ -5,40 +5,39 @@ using DevTeam.QueryMappings.AspNetCore;
 using DevTeam.GenericRepository.AspNetCore;
 using System.Reflection;
 
-namespace DevTeam.GenericService.AspNetCore
+namespace DevTeam.GenericService.AspNetCore;
+
+/// <summary>
+/// Extensions for ASP.NET Core that help to add mappings in the system on application start. 
+/// </summary>
+public static class GenericServiceExtensions
 {
     /// <summary>
-    /// Extensions for ASP.NET Core that help to add mappings in the system on application start. 
+    /// Adds all necessary services in provided IoC container.
     /// </summary>
-    public static class GenericServiceExtensions
+    /// <param name="services">IServiceCollection instance that will be used to register services in IOC container</param>
+    /// <returns>Returns provided IoC container with registred dependencies.</returns>
+    public static IServiceCollection AddGenericServices(this IServiceCollection services)
     {
-        /// <summary>
-        /// Adds all necessary services in provided IoC container.
-        /// </summary>
-        /// <param name="services">IServiceCollection instance that will be used to register services in IOC container</param>
-        /// <returns>Returns provided IoC container with registred dependencies.</returns>
-        public static IServiceCollection AddGenericServices(this IServiceCollection services)
-        {
-            services
-                .AddQueryMappings()
-                .AddGenericRepository()
-                .AddScoped(typeof(IGenericService<>), typeof(GenericService<>))
-                .AddScoped<IGenericService, GenericService>()
-                .AddScoped(typeof(ISoftDeleteGenericService<>), typeof(SoftDeleteGenericService<>))
-                .AddScoped<ISoftDeleteGenericService, SoftDeleteGenericService>();
+        services
+            .AddQueryMappings()
+            .AddGenericRepository()
+            .AddScoped(typeof(IGenericService<>), typeof(GenericService<>))
+            .AddScoped<IGenericService, GenericService>()
+            .AddScoped(typeof(ISoftDeleteGenericService<>), typeof(SoftDeleteGenericService<>))
+            .AddScoped<ISoftDeleteGenericService, SoftDeleteGenericService>();
 
-            return services;
-        }
+        return services;
+    }
 
-        /// <summary>
-        /// Search for implementations of <see cref="IMappingsStorage"/> inside of list of assemblies and registers mappings for usage.
-        /// </summary>
-        /// <param name="app">IApplicationBuilder instance that will be used to initialize mappings</param>
-        /// <param name="assemblies">List of assemblies where <see cref="IMappingsStorage"/> implementations are located.</param>
-        /// <exception cref="MappingException">Thrown if we couldn't initialize mappings.</exception>
-        public static void UseGenericServices(this IApplicationBuilder app, params Assembly[] assemblies)
-        {
-            app.UseQueryMappings(assemblies);
-        }
+    /// <summary>
+    /// Search for implementations of <see cref="IMappingsStorage"/> inside of list of assemblies and registers mappings for usage.
+    /// </summary>
+    /// <param name="app">IApplicationBuilder instance that will be used to initialize mappings</param>
+    /// <param name="assemblies">List of assemblies where <see cref="IMappingsStorage"/> implementations are located.</param>
+    /// <exception cref="MappingException">Thrown if we couldn't initialize mappings.</exception>
+    public static void UseGenericServices(this IApplicationBuilder app, params Assembly[] assemblies)
+    {
+        app.UseQueryMappings(assemblies);
     }
 }

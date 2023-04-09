@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -6,10 +6,10 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>DevTeam.GenericService.AspNetCore</PackageId>
-	<Version>3.4.5</Version>
+	<Version>3.5.3</Version>
 	<Authors>dimabezzubenkov, dev-team</Authors>
 	<Company>Dev Team, Inc</Company>
-	<Copyright>Copyright (c) Dev Team, Inc 2021.</Copyright>
+	<Copyright>Copyright (c) Dev Team, Inc 2023.</Copyright>
 	<Description>Integration between GenericService and AspNetCore.</Description>
 	<PackageIcon>icon.png</PackageIcon>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -17,12 +17,13 @@
 	<RepositoryType>git</RepositoryType>
 	<PackageTags>Repository;EntityFramework;IQueryable;AspNet</PackageTags>
 	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+	<LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevTeam.GenericRepository.AspNetCore" Version="3.4.3" />
-    <PackageReference Include="DevTeam.GenericService" Version="3.4.5" />
-    <PackageReference Include="DevTeam.QueryMappings.AspNetCore" Version="3.3.0" />
+    <PackageReference Include="DevTeam.GenericRepository.AspNetCore" Version="3.5.0" />
+    <PackageReference Include="DevTeam.GenericService" Version="3.5.3" />
+    <PackageReference Include="DevTeam.QueryMappings.AspNetCore" Version="3.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>

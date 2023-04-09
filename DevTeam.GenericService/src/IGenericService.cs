@@ -24,71 +24,87 @@ public interface IGenericService<TContext>
     IQueryable<TModel> QueryList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
         where TEntity : class;
     IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(TArgs args, string? mappingName = null)
-        where TEntity : class;
+        where TEntity : class
+        where TArgs : IServiceArgs;
     IQueryable<TModel> QueryList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
-        where TEntity : class;
+        where TEntity : class
+        where TArgs : IServiceArgs;
     List<TModel> GetList<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
         where TEntity : class;
     List<TModel> GetList<TEntity, TModel, TArgs>(TArgs args, string? mappingName = null)
-        where TEntity : class;
+        where TEntity : class
+        where TArgs : IServiceArgs;
     List<TModel> GetList<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
-        where TEntity : class;
+        where TEntity : class
+        where TArgs : IServiceArgs;
     Task<List<TModel>> GetListAsync<TEntity, TModel>(Expression<Func<TEntity, bool>>? filter = null, string? mappingName = null)
         where TEntity : class;
     Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(TArgs args, string? mappingName = null)
-        where TEntity : class;
+        where TEntity : class
+        where TArgs : IServiceArgs;
     Task<List<TModel>> GetListAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
-        where TEntity : class;
+        where TEntity : class
+        where TArgs : IServiceArgs;
     Task<List<TModel>> Search<TEntity, TModel, TSearchModel>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, string? mappingName = null)
         where TEntity : class
         where TSearchModel : PaginationParams;
     Task<List<TModel>> Search<TEntity, TModel, TSearchModel, TArgs>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, TArgs args, string? mappingName = null)
         where TEntity : class
-        where TSearchModel : PaginationParams;
+        where TSearchModel : PaginationParams
+        where TArgs : IServiceArgs;
     Task<PaginationModel<TModel>> Pagination<TEntity, TModel, TSearchModel>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, string? mappingName = null)
         where TEntity : class
         where TSearchModel : PaginationParams;
     Task<PaginationModel<TModel>> Pagination<TEntity, TModel, TSearchModel, TArgs>(ISearchService<TEntity, TSearchModel> searchService, TSearchModel searchModel, TArgs args, string? mappingName = null)
         where TEntity : class
-        where TSearchModel : PaginationParams;
+        where TSearchModel : PaginationParams
+        where TArgs : IServiceArgs;
     IQueryable<TModel> QueryOne<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>;
     IQueryable<TModel> QueryOne<TEntity, TModel, TKey, TArgs>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
-        where TKey : IEquatable<TKey>;
+        where TKey : IEquatable<TKey>
+        where TArgs : IServiceArgs;
     IQueryable<TModel> QueryOne<TEntity, TModel>(int id, string? mappingName = null)
         where TEntity : class, IEntity;
     IQueryable<TModel> QueryOne<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
-        where TEntity : class, IEntity;
+        where TEntity : class, IEntity
+        where TArgs : IServiceArgs;
     TModel Get<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
         where TEntity : class;
     TModel Get<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
-        where TEntity : class;
+        where TEntity : class
+        where TArgs : IServiceArgs;
     Task<TModel> GetAsync<TEntity, TModel>(Expression<Func<TEntity, bool>> filter, string? mappingName = null)
         where TEntity : class;
     Task<TModel> GetAsync<TEntity, TModel, TArgs>(Expression<Func<TEntity, bool>> filter, TArgs args, string? mappingName = null)
-        where TEntity : class;
+        where TEntity : class
+        where TArgs : IServiceArgs;
     TModel Get<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>;
     TModel Get<TEntity, TModel, TKey, TArgs>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
-        where TKey : IEquatable<TKey>;
+        where TKey : IEquatable<TKey>
+        where TArgs : IServiceArgs;
     Task<TModel> GetAsync<TEntity, TModel, TKey>(TKey id, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>;
     Task<TModel> GetAsync<TEntity, TModel, TKey, TArgs>(TKey id, TArgs args, string? mappingName = null)
         where TEntity : class, IEntity<TKey>
-        where TKey : IEquatable<TKey>;
+        where TKey : IEquatable<TKey>
+        where TArgs : IServiceArgs;
     TModel Get<TEntity, TModel>(int id, string? mappingName = null)
         where TEntity : class, IEntity;
     TModel Get<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
-        where TEntity : class, IEntity;
+        where TEntity : class, IEntity
+        where TArgs : IServiceArgs;
     Task<TModel> GetAsync<TEntity, TModel>(int id, string? mappingName = null)
         where TEntity : class, IEntity;
     Task<TModel> GetAsync<TEntity, TModel, TArgs>(int id, TArgs args, string? mappingName = null)
-        where TEntity : class, IEntity;
+        where TEntity : class, IEntity
+        where TArgs : IServiceArgs;
     TProperty GetProperty<TEntity, TProperty>(Expression<Func<TEntity, bool>> filter,
                                               Expression<Func<TEntity, TProperty>> selector)
         where TEntity : class;

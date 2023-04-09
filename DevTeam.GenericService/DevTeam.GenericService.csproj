@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<PackageId>DevTeam.GenericService</PackageId>
-	<Version>3.5.0</Version>
+	<Version>3.5.3</Version>
 	<Authors>dimabezzubenkov, dev-team</Authors>
 	<Company>Dev Team, Inc</Company>
 	<Copyright>Copyright (c) Dev Team, Inc 2023.</Copyright>
